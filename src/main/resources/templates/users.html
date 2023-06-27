@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <form style="margin-bottom: 25px" th:action="@{/users}" method="get" class="form-inline">
+        <div style="margin-inline: auto" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <label>ФИО: </label>
+            <input th:value="${fullName != null} ? ${fullName}" type="text" name="fullName"
+                   placeholder="ФИО" class="form-control"/>
+        </div>
+
+        <div style="margin-inline: auto" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <label>Дата рождения: </label>
+            <input th:value="${birthday != null} ? ${birthday}" type="date" name="birthday"
+                   placeholder="Дата рождения" class="form-control"/>
+        </div>
+
+        <div style="margin-inline: auto" class="form-group">
+            <div class="col-sm-6 controls">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>ФИО</th>
+            <th>Дата рождения</th>
+            <th colspan="3" style="text-align: center">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"/>
+            <td th:text="${user.firstName + ' ' + user.lastName}"/>
+            <td th:text="${user.birthday}"/>
+            <td>
+                <a th:href="@{'/users/show/' + ${user.id}}" th:text="Посмотреть"/>
+            </td>
+            <td>
+                <a th:href="@{'/users/edit/' + ${user.id}}" th:text="Изменить"/>
+            </td>
+            <td>
+                <a th:href="@{'/users/delete/' + ${user.id}}" th:text="Удалить"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${'Всего пользователей ' + users.size()}"/>
+    <br>
+    <br>
+    <a th:href="@{'/users/edit'}" th:text="'Добавить нового пользователя'"/>
+</div>
+
+</body>
+</html>
