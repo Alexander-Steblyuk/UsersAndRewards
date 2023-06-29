@@ -39,6 +39,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "call user_delete(:id)", nativeQuery = true)
     void delete(@Param("id") Long id);
 
+    @Query(value = "select * from users where birthday >= :birthday", nativeQuery = true)
+    List<User> findUsersByBirthday(@Param("birthday") LocalDate birthday);
+
+    @Query(value = "select id, firstname, lastname, birthday, CONCAT(firstname, ' ', lastname) as fullname " +
+            "from users where (concat(firstName, ' ', lastName)) like '%:fullname%'", nativeQuery = true)
+    List<User> findUsersByFullName(@Param("fullname") String fullName);
+
+    @Query(value = "select id, firstname, lastname, birthday, CONCAT(firstname, ' ', lastname) as fullname " +
+            "from users where (concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%') " +
+            "and birthday >= :birthday",
+            nativeQuery = true)
+    List<User> findUsersByFullNameAndBirthday(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);
+
     User findUserByFirstNameAndLastNameAndBirthday(String firstname, String lastname, LocalDate birthday);
 
     /*@Query(value = "select * from rewardings where userid = :id", nativeQuery = true)

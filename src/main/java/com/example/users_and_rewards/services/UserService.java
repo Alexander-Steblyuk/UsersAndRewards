@@ -90,19 +90,18 @@ public class UserService {
     }
 
     public List<User> getAllUsers(String fullName, LocalDate birthday) {
-        List<User> users = userRepository.findAll();
+        List<User> users;
 
-        if (fullName != null) {
-            users = users.stream()
-                    .filter(u -> (u.getFirstName() + " " + u.getLastName()).toLowerCase(Locale.ROOT)
-                            .contains(fullName.toLowerCase(Locale.ROOT)))
-                    .toList();
-        }
-
-        if (birthday != null) {
-            users = users.stream()
-                    .filter(u -> u.getBirthday().isAfter(birthday) || u.getBirthday().isEqual(birthday))
-                    .toList();
+        if (fullName == null && birthday == null) {
+            users = userRepository.findAll();
+        } else {
+            if (fullName != null && birthday != null) {
+                users = userRepository.findUsersByFullNameAndBirthday(fullName.toLowerCase(Locale.ROOT), birthday);
+            } else if (fullName != null) {
+                users = userRepository.findUsersByFullName(fullName.toLowerCase(Locale.ROOT));
+            } else {
+                users = userRepository.findUsersByBirthday(birthday);
+            }
         }
 
         return users;
