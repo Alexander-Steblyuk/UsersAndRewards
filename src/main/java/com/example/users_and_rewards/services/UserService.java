@@ -2,25 +2,19 @@ package com.example.users_and_rewards.services;
 
 import com.example.users_and_rewards.entities.User;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
-import com.example.users_and_rewards.exceptions.UserServiceException;
-import com.example.users_and_rewards.repositories.RewardingRepository;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.*;
 import com.example.users_and_rewards.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class UserService {
     private static final String EMPTY_STRING = "";
-
-    private static final String INVALID_FIRSTNAME_INSERT_MESSAGE = "FIRST NAME CAN`T BE NULL OR EMPTY!";
-    private static final String INVALID_LASTNAME_INSERT_MESSAGE = "LAST NAME CAN`T BE NULL OR EMPTY!";
-    private static final String INVALID_BIRTHDAY_INSERT_MESSAGE = "INVALID BIRTHDAY VALUE!";
-    private static final String EXISTING_USER_INSERT_MESSAGE = "USER WITH SAME PARAMS HAS ALREADY EXISTS!";
 
     private UserRepository userRepository;
     private RewardingService rewardingService;
@@ -35,37 +29,34 @@ public class UserService {
         this.rewardingService = rewardingService;
     }
 
-    public void save(User user) throws UserServiceException {
-        String message = EMPTY_STRING;
-        boolean isException = true;
-
+    public void edit(User user) throws UserServiceException {
+        if (user.getId() != null) {
+            Optional<User> oldUser = userRepository.findById(user.getId());
+            update(user, oldUser.orElseThrow(UserNotFoundException::new));
+        } else {
+            save(user);
+        }
+    }
+    private void save(User user) throws UserServiceException {
         if (user.getFirstName() == null || user.getFirstName().equals(EMPTY_STRING)) {
-            message = INVALID_FIRSTNAME_INSERT_MESSAGE;
+            throw new IllegalFirstNameException();
         } else if (user.getLastName() == null || user.getLastName().equals(EMPTY_STRING)) {
-            message = INVALID_LASTNAME_INSERT_MESSAGE;
+            throw new IllegalLastNameException();
         } else if (user.getBirthday() == null || !yearsCheck(user.getBirthday())) {
-            message = INVALID_BIRTHDAY_INSERT_MESSAGE;
+            throw new IllegalBirthDayException();
         } else if (userRepository.findUserByFirstNameAndLastNameAndBirthday(user.getFirstName(),
                 user.getLastName(), user.getBirthday()) != null) {
-            message = EXISTING_USER_INSERT_MESSAGE;
+            throw new UserAlreadyExistsException();
         } else {
-            isException = false;
-        }
-
-        if (isException) {
-            throw new UserServiceException(message);
-        }
-
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new UserServiceException(e.getMessage());
+            try {
+                userRepository.save(user);
+            } catch (Exception e) {
+                throw new UserServiceException(e.getMessage(), e);
+            }
         }
     }
 
-    public void update(User user) throws UserServiceException {
-        User oldUser = userRepository.findById(user.getId()).orElse(new User());
-
+    private void update(User user, User oldUser) throws UserServiceException {
         try {
             if (!oldUser.getFirstName().equals(user.getFirstName())) {
                 userRepository.updateFirstName(user.getId(), user.getFirstName());
@@ -87,6 +78,10 @@ public class UserService {
         } catch (Exception e) {
             throw new UserServiceException(e.getMessage());
         }
+    }
+
+    public User getUserById(Long id) throws UserServiceException {
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> getAllUsers(String fullName, LocalDate birthday) {
