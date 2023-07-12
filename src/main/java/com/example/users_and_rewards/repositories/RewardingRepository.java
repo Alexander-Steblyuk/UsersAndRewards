@@ -24,11 +24,13 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
 
     @Modifying
     @Transactional
-    @Query(value = "call rewarding_user_update(:user_id, :reward_title, :reward_date, :new_user_id)", nativeQuery = true)
-    void updateUser(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
-                     @Param("reward_date") LocalDate date, @Param("new_user_id") Long newUserId);
+    @Query(value = "call rewarding_update(:user_id, :reward_title, :reward_date, :new_user_id, :new_reward_title," +
+            ":new_reward_date)", nativeQuery = true)
+    void update(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
+                     @Param("reward_date") LocalDate date, @Param("new_user_id") Long newUserId,
+                    @Param("new_reward_title") String newRewardTitle, @Param("new_reward_date") LocalDate newRewardDate);
 
-    @Modifying
+    /*@Modifying
     @Transactional
     @Query(value = "call rewarding_reward_update(:user_id, :reward_title, :reward_date, :new_reward_title)", nativeQuery = true)
     void updateReward(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
@@ -38,7 +40,7 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
     @Transactional
     @Query(value = "call rewarding_date_update(:user_id, :reward_title, :reward_date, :new_reward_date)", nativeQuery = true)
     void updateDate(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
-                     @Param("reward_date") LocalDate date, @Param("new_reward_date") LocalDate newRewardDate);
+                     @Param("reward_date") LocalDate date, @Param("new_reward_date") LocalDate newRewardDate);*/
 
     @Modifying
     @Transactional

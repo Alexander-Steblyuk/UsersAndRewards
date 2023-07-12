@@ -20,13 +20,14 @@ public interface RewardRepository extends JpaRepository<Reward, String> {
 
     @Modifying
     @Transactional
-    @Query(value = "call reward_title_update(:title, :new_title)", nativeQuery = true)
-    void updateTitle(@Param("title") String title, @Param("new_title") String newTitle);
+    @Query(value = "call reward_update(:title, :new_title, :new_description)", nativeQuery = true)
+    void update(@Param("title") String title, @Param("new_title") String newTitle,
+                     @Param("new_description") String newDescription);
 
-    @Modifying
+    /*@Modifying
     @Transactional
     @Query(value = "call reward_description_update(:title, :new_description)", nativeQuery = true)
-    void updateDescription(@Param("title") String title, @Param("new_description") String newDescription);
+    void updateDescription(@Param("title") String title, @Param("new_description") String newDescription);*/
 
     @Modifying
     @Transactional

@@ -57,12 +57,7 @@ public class RewardService {
         Reward oldReward = rewardRepository.findRewardByTitle(reward.getTitle());
 
         try {
-            if (!oldReward.getTitle().equals(reward.getTitle())) {
-                rewardRepository.updateTitle(reward.getTitle(), reward.getTitle());
-            }
-            if (!oldReward.getDescription().equals(reward.getDescription())) {
-                rewardRepository.updateDescription(reward.getTitle(), reward.getDescription());
-            }
+            rewardRepository.update(oldReward.getTitle(), reward.getTitle(), reward.getDescription());
         } catch (Exception e) {
             throw new RewardServiceException(e.getMessage());
         }

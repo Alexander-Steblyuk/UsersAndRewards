@@ -31,8 +31,7 @@ public class UserService {
 
     public void edit(User user) throws UserServiceException {
         if (user.getId() != null) {
-            Optional<User> oldUser = userRepository.findById(user.getId());
-            update(user, oldUser.orElseThrow(UserNotFoundException::new));
+            update(user);
         } else {
             save(user);
         }
@@ -40,33 +39,31 @@ public class UserService {
     private void save(User user) throws UserServiceException {
         if (user.getFirstName() == null || user.getFirstName().equals(EMPTY_STRING)) {
             throw new IllegalFirstNameException();
-        } else if (user.getLastName() == null || user.getLastName().equals(EMPTY_STRING)) {
+        }
+
+        if (user.getLastName() == null || user.getLastName().equals(EMPTY_STRING)) {
             throw new IllegalLastNameException();
-        } else if (user.getBirthday() == null || !yearsCheck(user.getBirthday())) {
+        }
+
+        if (user.getBirthday() == null || !yearsCheck(user.getBirthday())) {
             throw new IllegalBirthDayException();
-        } else if (userRepository.findUserByFirstNameAndLastNameAndBirthday(user.getFirstName(),
+        }
+
+        if (userRepository.findUserByFirstNameAndLastNameAndBirthday(user.getFirstName(),
                 user.getLastName(), user.getBirthday()) != null) {
             throw new UserAlreadyExistsException();
-        } else {
-            try {
-                userRepository.save(user);
-            } catch (Exception e) {
-                throw new UserServiceException(e.getMessage(), e);
-            }
+        }
+
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new UserServiceException(e.getMessage(), e);
         }
     }
 
-    private void update(User user, User oldUser) throws UserServiceException {
+    private void update(User user) throws UserServiceException {
         try {
-            if (!oldUser.getFirstName().equals(user.getFirstName())) {
-                userRepository.updateFirstName(user.getId(), user.getFirstName());
-            }
-            if (!oldUser.getLastName().equals(user.getLastName())) {
-                userRepository.updateLastName(user.getId(), user.getLastName());
-            }
-            if (!oldUser.getBirthday().equals(user.getBirthday())) {
-                userRepository.updateBirthday(user.getId(), user.getBirthday());
-            }
+            userRepository.update(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthday());
         } catch (Exception e) {
             throw new UserServiceException(e.getMessage());
         }
@@ -84,19 +81,13 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
-    public List<User> getAllUsers(String fullName, LocalDate birthday) {
+    public List<User> getUsers(String fullName, LocalDate birthday) {
         List<User> users;
 
         if (fullName == null && birthday == null) {
             users = userRepository.findAll();
         } else {
-            if (fullName != null && birthday != null) {
-                users = userRepository.findUsersByFullNameAndBirthday(fullName.toLowerCase(Locale.ROOT), birthday);
-            } else if (fullName != null) {
-                users = userRepository.findUsersByFullName(fullName.toLowerCase(Locale.ROOT));
-            } else {
-                users = userRepository.findUsersByBirthday(birthday);
-            }
+            users = userRepository.findFilteredUsers(fullName.toLowerCase(Locale.ROOT), birthday);
         }
 
         return users;

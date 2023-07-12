@@ -21,10 +21,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "call user_first_name_update(:id, :new_first_name)", nativeQuery = true)
-    void updateFirstName(@Param("id") Long id, @Param("new_first_name") String newFirstName);
+    @Query(value = "call user_update(:id, :new_first_name, :new_last_name, :new_birthday)", nativeQuery = true)
+    void update(@Param("id") Long id, @Param("new_first_name") String newFirstName,
+                         @Param("new_last_name") String newLastName, @Param("new_birthday") LocalDate newBirthday);
 
-    @Modifying
+    /*@Modifying
     @Transactional
     @Query(value = "call user_last_name_update(:id, :new_last_name)", nativeQuery = true)
     void updateLastName(@Param("id") Long id, @Param("new_last_name") String newLastName);
@@ -32,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Transactional
     @Query(value = "call user_birthday_update(:id, :new_birthday)", nativeQuery = true)
-    void updateBirthday(@Param("id") Long id, @Param("new_birthday") LocalDate newBirthday);
+    void updateBirthday(@Param("id") Long id, @Param("new_birthday") LocalDate newBirthday);*/
 
     @Modifying
     @Transactional
@@ -42,13 +43,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from users where birthday >= :birthday", nativeQuery = true)
     List<User> findUsersByBirthday(@Param("birthday") LocalDate birthday);
 
-    @Query(value = "select id, firstname, lastname, birthday, CONCAT(firstname, ' ', lastname) as fullname " +
-            "from users where (concat(firstName, ' ', lastName)) like '%:fullname%'", nativeQuery = true)
-    List<User> findUsersByFullName(@Param("fullname") String fullName);
+    @Query(value = "select * from users where (:fullname is null OR lower(concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%')) " +
+            "AND (:birthday is null OR birthday >= :birthday)", nativeQuery = true)
+    List<User> findFilteredUsers(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);
 
-    @Query(value = "select * from users where (concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%') " +
+    /*@Query(value = "select * from users where (concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%') " +
             "and birthday >= :birthday", nativeQuery = true)
-    List<User> findUsersByFullNameAndBirthday(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);
+    List<User> findUsersByFullNameAndBirthday(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);*/
 
     User findUserByFirstNameAndLastNameAndBirthday(String firstname, String lastname, LocalDate birthday);
 

@@ -28,7 +28,7 @@ public class UserController {
 
         model.addAttribute("fullName", fullName);
         model.addAttribute("birthday", birthday);
-        model.addAttribute("users", userService.getAllUsers(fullName, birthday));
+        model.addAttribute("users", userService.getUsers(fullName, birthday));
 
         return "users";
     }

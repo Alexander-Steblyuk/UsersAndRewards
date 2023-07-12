@@ -32,18 +32,8 @@ public class RewardingService {
         Rewarding oldRewarding = rewardingRepository.findRewardingByIdUserAndIdRewardAndIdRewardingDate(user, reward, date);
 
         try {
-            if (!oldRewarding.getUser().getId().equals(user.getId())) {
-                rewardingRepository.updateUser(oldRewarding.getUser().getId(), oldRewarding.getReward().getTitle(),
-                        oldRewarding.getRewardingDate(), user.getId());
-            }
-            if (!oldRewarding.getReward().getTitle().equals(reward.getTitle())) {
-                rewardingRepository.updateReward(oldRewarding.getUser().getId(), oldRewarding.getReward().getTitle(),
-                        oldRewarding.getRewardingDate(), reward.getTitle());
-            }
-            if (!oldRewarding.getRewardingDate().equals(date)) {
-                rewardingRepository.updateDate(oldRewarding.getUser().getId(), oldRewarding.getReward().getTitle(),
-                        oldRewarding.getRewardingDate(), date);
-            }
+            rewardingRepository.update(oldRewarding.getUser().getId(), oldRewarding.getReward().getTitle(),
+                    oldRewarding.getRewardingDate(), user.getId(), reward.getTitle(), date);
         } catch (Exception e) {
             throw new RewardingServiceException(e.getMessage());
         }

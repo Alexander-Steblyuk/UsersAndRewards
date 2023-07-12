@@ -111,7 +111,7 @@ $$;
 ----------------------------------------------UPDATE-----------------------------------------------------------------
 --GO
 
-CREATE PROCEDURE user_first_name_update (user_id bigint, new_first_name varchar(100))
+CREATE PROCEDURE user_update (user_id bigint, new_first_name varchar(100), new_last_name varchar(100), new_birth_date date)
 LANGUAGE plpgsql
 AS 
 $$
@@ -120,51 +120,55 @@ BEGIN
 		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50100';
 	END IF;
 	
-	IF new_first_name IS NULL THEN 
-		RAISE EXCEPTION 'A NEW FIRST NAME CAN`T BE NULL' USING ERRCODE = '50101';
+	IF new_first_name IS NULL OR new_first_name = '' THEN
+		RAISE EXCEPTION 'A NEW FIRST NAME CAN`T BE NULL OR EMPTY' USING ERRCODE = '50101';
 	END IF;
+
+	IF new_last_name IS NULL OR new_last_name = '' THEN
+    		RAISE EXCEPTION 'A NEW LAST NAME CAN`T BE NULL OR EMPTY' USING ERRCODE = '50102';
+    END IF;
+
+    IF new_birth_date IS NULL THEN
+    		RAISE EXCEPTION 'A NEW BIRTHDAY CAN`T BE NULL' USING ERRCODE = '50104';
+    END IF;
 		
-	UPDATE Users SET FirstName = new_first_name WHERE Id = user_id;
+	UPDATE Users SET FirstName = new_first_name, LastName = new_last_name, Birthday = new_birth_date WHERE Id = user_id;
 END
 $$;
 
 --GO
 
-CREATE PROCEDURE user_last_name_update (user_id bigint, new_last_name varchar(100))
-LANGUAGE plpgsql
-AS 
-$$
-BEGIN
-	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN 
-		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50103';
-	END IF;
-	
-	IF new_last_name IS NULL THEN 
-		RAISE EXCEPTION 'A NEW LAST NAME CAN`T BE NULL' USING ERRCODE = '50104';
-	END IF;
-		
-	UPDATE Users SET LastName = new_last_name WHERE Id = user_id;
-END
-$$;
-
---GO
-
-CREATE PROCEDURE user_birthday_update (user_id bigint, new_birth_date date)
-LANGUAGE plpgsql 
-AS
-$$
-BEGIN
-	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN 
-		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50105';
-	END IF;
-	
-	IF new_birth_date IS NULL THEN 
-		RAISE EXCEPTION 'A NEW BIRTHDAY CAN`T BE NULL' USING ERRCODE = '50106';
-	END IF;
-		
-	UPDATE Users SET Birthday = new_birth_date WHERE Id = user_id;
-END
-$$;
+--CREATE PROCEDURE user_last_name_update (user_id bigint, new_last_name varchar(100))
+--LANGUAGE plpgsql
+--AS
+--$$
+--BEGIN
+--	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN
+--		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50103';
+--	END IF;
+--
+--
+--
+--	UPDATE Users SET LastName = new_last_name WHERE Id = user_id;
+--END
+--$$;
+--
+----GO
+--
+--CREATE PROCEDURE user_birthday_update (user_id bigint, new_birth_date date)
+--LANGUAGE plpgsql
+--AS
+--$$
+--BEGIN
+--	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN
+--		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50105';
+--	END IF;
+--
+--
+--
+--	UPDATE Users SET Birthday = new_birth_date WHERE Id = user_id;
+--END
+--$$;
 
 --GO
 
@@ -172,7 +176,7 @@ $$;
 
 --GO
 
-CREATE PROCEDURE reward_title_update (title varchar(100), new_title varchar(100)) 
+CREATE PROCEDURE reward_update (title varchar(100), new_title varchar(100), new_description varchar(500))
 LANGUAGE plpgsql
 AS 
 $$
@@ -185,30 +189,31 @@ BEGIN
 		RAISE EXCEPTION 'A NEW TITLE CAN`T BE NULL' USING ERRCODE = '50111';
 	END IF;
 		
-	UPDATE Rewards SET Title = new_title WHERE Title = title;
+	UPDATE Rewards SET Title = new_title, Description = new_description WHERE Title = title;
 END
 $$;
 
 --GO
 
-CREATE PROCEDURE reward_description_update (title varchar(100), new_description varchar(500)) 
-LANGUAGE plpgsql
-AS 
-$$
-BEGIN
-	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = title) THEN 
-		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50112';
-	END IF;
-		
-	UPDATE Rewards SET Description = new_description WHERE Title = title;
-END
-$$;
+--CREATE PROCEDURE reward_description_update (title varchar(100), new_description varchar(500))
+--LANGUAGE plpgsql
+--AS
+--$$
+--BEGIN
+--	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = title) THEN
+--		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50112';
+--	END IF;
+--
+--	UPDATE Rewards SET Description = new_description WHERE Title = title;
+--END
+--$$;
 
 --GO
 -----------------------------------------
 --GO
 
-CREATE PROCEDURE rewarding_user_update (user_id bigint, reward_title varchar(100), reward_date date, new_user_id bigint)
+CREATE PROCEDURE rewarding_update (user_id bigint, reward_title varchar(100), reward_date date, new_user_id bigint,
+new_reward_title varchar(100), new_reward_date date)
 LANGUAGE plpgsql
 AS 
 $$
@@ -228,64 +233,73 @@ BEGIN
 	IF NOT EXISTS(SELECT * FROM Users WHERE Id = new_user_id) THEN 
 		RAISE EXCEPTION 'THIS NEW REWARDEE USER DOESN`T EXIST' USING ERRCODE = '50123';
 	END IF;
+
+	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = new_reward_title) THEN
+    		RAISE EXCEPTION 'THIS NEW REWARD DOESN`T EXIST' USING ERRCODE = '50124';
+    END IF;
+
+    IF new_reward_date IS NULL THEN
+    		RAISE EXCEPTION 'A REWARD DATE CAN`T BE NULL' USING ERRCODE = '50125';
+    END IF;
 		
-	UPDATE Rewardings SET UserId = new_user_id WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
+	UPDATE Rewardings SET UserId = new_user_id, RewardTitle = new_reward_title, RewardDate = new_reward_date
+	 WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
 END
 $$;
 
 --GO
 
-CREATE PROCEDURE rewarding_reward_update (user_id bigint, reward_title varchar(100), reward_date date, new_reward_title varchar(100))
-LANGUAGE plpgsql
-AS 
-$$
-BEGIN
-	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN 
-		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50124';
-	END IF;
-	
-	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = reward_title) THEN 
-		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50125';
-	END IF;
-	
-	IF NOT EXISTS(SELECT * FROM Rewardings WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date) THEN
-		RAISE EXCEPTION 'THIS REWARDEE DOESN`T EXIST' USING ERRCODE = '50126';
-	END IF;
-	
-	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = new_reward_title) THEN 
-		RAISE EXCEPTION 'THIS NEW REWARD DOESN`T EXIST' USING ERRCODE = '50127';
-	END IF;
-		
-	UPDATE Rewardings SET RewardTitle = new_reward_title WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
-END
-$$;
-
---GO
-
-CREATE PROCEDURE rewarding_date_update (user_id bigint, reward_title varchar(100), reward_date date, new_reward_date date)
-LANGUAGE plpgsql
-AS 
-$$
-BEGIN
-	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN 
-		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50128';
-	END IF;
-	
-	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = reward_title) THEN 
-		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50129';
-	END IF;
-	
-	IF NOT EXISTS(SELECT * FROM Rewardings WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date) THEN
-		RAISE EXCEPTION 'THIS REWARDEE DOESN`T EXIST' USING ERRCODE = '50130';
-	END IF;
-	
-	IF new_reward_date IS NULL THEN 
-		RAISE EXCEPTION 'A REWARD DATE CAN`T BE NULL' USING ERRCODE = '50131';
-	END IF;
-		
-	UPDATE Rewardings SET RewardDate = new_reward_date WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
-END
-$$;
+--CREATE PROCEDURE rewarding_reward_update (user_id bigint, reward_title varchar(100), reward_date date, new_reward_title varchar(100))
+--LANGUAGE plpgsql
+--AS
+--$$
+--BEGIN
+--	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN
+--		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50124';
+--	END IF;
+--
+--	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = reward_title) THEN
+--		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50125';
+--	END IF;
+--
+--	IF NOT EXISTS(SELECT * FROM Rewardings WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date) THEN
+--		RAISE EXCEPTION 'THIS REWARDEE DOESN`T EXIST' USING ERRCODE = '50126';
+--	END IF;
+--
+--	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = new_reward_title) THEN
+--		RAISE EXCEPTION 'THIS NEW REWARD DOESN`T EXIST' USING ERRCODE = '50127';
+--	END IF;
+--
+--	UPDATE Rewardings SET RewardTitle = new_reward_title WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
+--END
+--$$;
+--
+----GO
+--
+--CREATE PROCEDURE rewarding_date_update (user_id bigint, reward_title varchar(100), reward_date date, new_reward_date date)
+--LANGUAGE plpgsql
+--AS
+--$$
+--BEGIN
+--	IF NOT EXISTS(SELECT * FROM Users WHERE Id = user_id) THEN
+--		RAISE EXCEPTION 'THIS USER DOESN`T EXIST' USING ERRCODE = '50128';
+--	END IF;
+--
+--	IF NOT EXISTS(SELECT * FROM Rewards WHERE Title = reward_title) THEN
+--		RAISE EXCEPTION 'THIS REWARD DOESN`T EXIST' USING ERRCODE = '50129';
+--	END IF;
+--
+--	IF NOT EXISTS(SELECT * FROM Rewardings WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date) THEN
+--		RAISE EXCEPTION 'THIS REWARDEE DOESN`T EXIST' USING ERRCODE = '50130';
+--	END IF;
+--
+--	IF new_reward_date IS NULL THEN
+--		RAISE EXCEPTION 'A REWARD DATE CAN`T BE NULL' USING ERRCODE = '50131';
+--	END IF;
+--
+--	UPDATE Rewardings SET RewardDate = new_reward_date WHERE UserId = user_id AND RewardTitle = reward_title AND RewardDate = reward_date;
+--END
+--$$;
 
 --GO
 
