@@ -69,8 +69,7 @@ public class UserController {
     public String addUser(@ModelAttribute(value = "user") User user) {
         try {
             userService.edit(user);
-        } catch (IllegalFirstNameException | IllegalLastNameException |
-                IllegalBirthDayException | UserAlreadyExistsException e) {
+        } catch (UserServiceException e) {
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
