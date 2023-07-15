@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Rewardees")
+@Table(name = "Rewardings")
 public class Rewarding {
     @EmbeddedId
     private RewardingId id;

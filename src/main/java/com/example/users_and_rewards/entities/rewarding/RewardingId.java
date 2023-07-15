@@ -2,6 +2,7 @@ package com.example.users_and_rewards.entities.rewarding;
 
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,7 +20,7 @@ public class RewardingId {
     @JoinColumn(name = "rewardtitle")
     private Reward reward;
 
-    @JoinColumn(name = "rewarddate")
+    @Column(name = "rewarddate")
     private LocalDate rewardingDate;
 
     public RewardingId(User user, Reward reward, LocalDate rewardingDate) {

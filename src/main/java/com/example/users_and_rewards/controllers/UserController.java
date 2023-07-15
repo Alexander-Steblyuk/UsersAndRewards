@@ -36,7 +36,10 @@ public class UserController {
     @GetMapping("/show/{id}")
     public String showUser(Model model, @PathVariable("id") Long id) {
         try {
-            model.addAttribute("user", userService.getUserById(id));
+            User user = userService.getUserById(id);
+
+            model.addAttribute("user", user);
+            model.addAttribute("rewardings", userService.findRewardings(user));
         } catch (UserNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
