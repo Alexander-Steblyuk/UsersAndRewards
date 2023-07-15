@@ -30,7 +30,7 @@ public class UserController {
         model.addAttribute("birthday", birthday);
         model.addAttribute("users", userService.getUsers(fullName, birthday));
 
-        return "users";
+        return "users_tmp/users";
     }
 
     @GetMapping("/show/{id}")
@@ -41,28 +41,28 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
-        return "user-page";
+        return "users_tmp/user-page";
     }
 
     @GetMapping("/edit")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
 
-        return "edit-user";
+        return "users_tmp/edit-user";
     }
 
     @GetMapping("/edit/{id}")
     public String editUser(Model model, @PathVariable(name = "id") Long id) {
         model.addAttribute("user", userService.getUserById(id));
 
-        return "edit-user";
+        return "users_tmp/edit-user";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.delete(userService.getUserById(id));
 
-        return "redirect:/users";
+        return "redirect:users_tmp/users";
     }
 
     @PostMapping("/edit")
@@ -73,6 +73,6 @@ public class UserController {
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
-        return "redirect:/users";
+        return "redirect:users_tmp/users";
     }
 }

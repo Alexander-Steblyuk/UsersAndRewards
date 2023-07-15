@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -87,7 +86,7 @@ public class UserService {
         if (fullName == null && birthday == null) {
             users = userRepository.findAll();
         } else {
-            users = userRepository.findFilteredUsers(fullName.toLowerCase(Locale.ROOT), birthday);
+            users = userRepository.findFilteredUsers(fullName, birthday);
         }
 
         return users;
