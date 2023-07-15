@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Реестр наград</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <form style="margin-bottom: 25px" th:action="@{/rewards}" method="get" class="form-inline">
+        <div style="margin-inline: auto" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-reward"></i></span>
+            <label>Название: </label>
+            <input th:value="${title != null} ? ${title}" type="text" name="title"
+                   placeholder="Название" class="form-control"/>
+        </div>
+
+        <div style="margin-inline: auto" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-reward"></i></span>
+            <label>Описание: </label>
+            <input th:value="${description != null} ? ${description}" type="text" name="description"
+                   placeholder="Описание" class="form-control"/>
+        </div>
+
+        <div style="margin-inline: auto" class="form-group">
+            <div class="col-sm-6 controls">
+                <button type="submit" class="btn btn-primary">Отфильтровать</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th colspan="3" style="text-align: center">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reward : ${rewards}">
+            <td th:text="${reward.title}"/>
+            <td th:text="${reward.description}"/>
+            <td>
+                <a th:href="@{'/rewards/show/' + ${reward.title}}" th:text="Посмотреть"/>
+            </td>
+            <td>
+                <a th:href="@{'/rewards/edit/' + ${reward.title}}" th:text="Изменить"/>
+            </td>
+            <td>
+                <a th:href="@{'/rewards/delete/' + ${reward.title}}" th:text="Удалить"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${'Всего наград: ' + rewards.size()}"/>
+    <br>
+    <br>
+    <a th:href="@{'/rewards/edit'}" th:text="'Добавить новую награду'"/>
+</div>
+
+</body>
+</html>

@@ -2,9 +2,8 @@ package com.example.users_and_rewards.services;
 
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
-import com.example.users_and_rewards.exceptions.RewardServiceException;
+import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardServiceException;
 import com.example.users_and_rewards.repositories.RewardRepository;
-import com.example.users_and_rewards.repositories.RewardingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,23 @@ public class RewardService {
         this.rewardingService = rewardingService;
     }
 
-    public void save(Reward reward) throws RewardServiceException {
+    public List<Reward> getRewards(String title, String description) {
+        List<Reward> rewards;
+
+        if (title == null && description == null) {
+            rewards = rewardRepository.findAll();
+        } else {
+            rewards = rewardRepository.findFilteredRewards(title, description);
+        }
+
+        return rewards;
+    }
+
+    public Reward getRewardByTitle(String title) throws RewardServiceException {
+        return rewardRepository.findRewardByTitle(title);
+    }
+
+    public void edit(Reward reward) throws RewardServiceException {
         String message = EMPTY_STRING;
         boolean isException = true;
 

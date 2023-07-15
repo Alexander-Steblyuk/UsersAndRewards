@@ -35,7 +35,12 @@ public interface RewardRepository extends JpaRepository<Reward, String> {
     void delete(@Param("title") String title);
 
     @Query(value = "select * from rewardings where rewardtitle = :title", nativeQuery = true)
-    List<Rewarding> findAllRewardings(@Param("title") String title);
+    List<Rewarding> findAllRewardingsByRewardTitle(@Param("title") String title);
 
     Reward findRewardByTitle(String title);
+
+    @Query(value = "select * from rewards where (:title is null OR lower(title) like " +
+            "CONCAT('%', LOWER(:title), '%')) AND (:description is null OR description like " +
+            "CONCAT('%', LOWER(:description), '%')))", nativeQuery = true)
+    List<Reward> findFilteredRewards(@Param("title") String title, @Param("description") String description);
 }

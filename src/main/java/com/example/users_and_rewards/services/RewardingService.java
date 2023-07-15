@@ -3,7 +3,7 @@ package com.example.users_and_rewards.services;
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.User;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
-import com.example.users_and_rewards.exceptions.RewardingServiceException;
+import com.example.users_and_rewards.exceptions.rewarding_service_exceptions.RewardingServiceException;
 import com.example.users_and_rewards.repositories.RewardingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
