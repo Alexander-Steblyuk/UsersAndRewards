@@ -2,6 +2,8 @@ package com.example.users_and_rewards.services;
 
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
+import com.example.users_and_rewards.exceptions.reward_service_exceptions.InvalidRewardTitleException;
+import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardAlreadyExistsException;
 import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardServiceException;
 import com.example.users_and_rewards.repositories.RewardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,6 @@ import java.util.List;
 @Service
 public class RewardService {
     private static final String EMPTY_STRING = "";
-
-    private static final String INVALID_TITLE_INSERT_MESSAGE = "TITLE CAN`T BE NULL OR EMPTY!";
-    private static final String EXISTING_REWARD_INSERT_MESSAGE = "THE REWARD WITH THIS TITLE HAS ALREADY EXIST!";
 
     private RewardRepository rewardRepository;
     private RewardingService rewardingService;
@@ -46,35 +45,27 @@ public class RewardService {
     }
 
     public void edit(Reward reward) throws RewardServiceException {
-        String message = EMPTY_STRING;
-        boolean isException = true;
-
         if (reward.getTitle() == null || reward.getTitle().equals(EMPTY_STRING)) {
-            message = INVALID_TITLE_INSERT_MESSAGE;
-        } else if (rewardRepository.findRewardByTitle(reward.getTitle()) != null) {
-            message = EXISTING_REWARD_INSERT_MESSAGE;
-        } else {
-            isException = false;
+            throw new InvalidRewardTitleException();
         }
 
-        if (isException) {
-            throw new RewardServiceException(message);
+        if (rewardRepository.findRewardByTitle(reward.getTitle()) != null) {
+            throw new RewardAlreadyExistsException();
         }
 
         try {
             rewardRepository.save(reward);
         } catch (Exception e) {
-            throw new RewardServiceException(e.getMessage());
+            throw new RewardServiceException(e.getMessage(), e);
         }
     }
 
     public void update(Reward reward) throws RewardServiceException {
-        Reward oldReward = rewardRepository.findRewardByTitle(reward.getTitle());
-
         try {
+            Reward oldReward = rewardRepository.findRewardByTitle(reward.getTitle());
             rewardRepository.update(oldReward.getTitle(), reward.getTitle(), reward.getDescription());
         } catch (Exception e) {
-            throw new RewardServiceException(e.getMessage());
+            throw new RewardServiceException(e.getMessage(), e);
         }
     }
 
@@ -82,7 +73,7 @@ public class RewardService {
         try {
             rewardRepository.delete(reward);
         } catch (Exception e) {
-            throw new RewardServiceException(e.getMessage());
+            throw new RewardServiceException(e.getMessage(), e);
         }
     }
 

@@ -7,22 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserNotFoundException extends UserServiceException {
     private static final String USER_NOT_FOUND_MESSAGE = "THIS USER IS NOT EXISTS!";
 
-    public UserNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public UserNotFoundException(String s) {
-        super(s);
-    }
-
-    public UserNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UserNotFoundException() {
-        super(USER_NOT_FOUND_MESSAGE);
-    }
-
     @Override
     public String getMessage() {
         return USER_NOT_FOUND_MESSAGE;

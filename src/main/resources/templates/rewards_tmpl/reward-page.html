@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text = "${'Страница награды ' + reward.title}"></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <a style="display:block; text-align:right;" th:href="@{'/rewards'}" th:text="'К списку наград'"/>
+    <h3 th:text = "${'О награде: ' + reward.title}"></h3>
+    <br>
+    <div class="h6">
+        <p><span th:text = "${'Название: ' + reward.title}"></span></p>
+        <p><span th:text = "${'Описание: ' + reward.description}"></span></p>
+    </div>
+    <br>
+    <table class="table caption-top table-hover">
+        <caption class="h4">Список награжденных</caption>
+        <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Дата награждения</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="rewarding : ${rewardings}">
+            <td th:text="${rewarding.getUser().firstName + ' ' + rewarding.getUser().lastName}"/>
+            <td th:text="${rewarding.getRewardDate()}"/>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${'Всего награжденных пользователей: ' + rewardings.size()}"/>
+</div>
+</body>
+</html>

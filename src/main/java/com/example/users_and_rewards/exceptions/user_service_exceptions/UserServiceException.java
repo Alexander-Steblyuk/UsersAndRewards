@@ -1,8 +1,8 @@
 package com.example.users_and_rewards.exceptions.user_service_exceptions;
 
 public class UserServiceException extends IllegalArgumentException {
-    public UserServiceException(Throwable cause) {
-        super(cause);
+    public UserServiceException() {
+        super();
     }
 
     public UserServiceException(String s) {
@@ -13,6 +13,7 @@ public class UserServiceException extends IllegalArgumentException {
         super(message, cause);
     }
 
-    public UserServiceException() {
+    public UserServiceException(Throwable cause) {
+        super(cause);
     }
 }

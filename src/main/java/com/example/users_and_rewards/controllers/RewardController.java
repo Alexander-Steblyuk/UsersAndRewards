@@ -1,11 +1,14 @@
 package com.example.users_and_rewards.controllers;
 
 import com.example.users_and_rewards.entities.Reward;
+import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardServiceException;
 import com.example.users_and_rewards.services.RewardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/rewards")
@@ -30,7 +33,13 @@ public class RewardController {
 
     @GetMapping("/show/{title}")
     public String showReward(Model model, @PathVariable("title") String title) {
-        model.addAttribute("reward", rewardService.getRewardByTitle(title));
+        try {
+            Reward reward = rewardService.getRewardByTitle(title);
+            model.addAttribute("reward", reward);
+            model.addAttribute("rewardings", rewardService.findRewardingsByReward(reward));
+        } catch (RewardServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
         return "rewards_tmpl/reward-page";
     }

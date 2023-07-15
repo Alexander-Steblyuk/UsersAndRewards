@@ -64,7 +64,7 @@ public class UserService {
         try {
             userRepository.update(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthday());
         } catch (Exception e) {
-            throw new UserServiceException(e.getMessage());
+            throw new UserServiceException(e.getMessage(), e);
         }
     }
 
@@ -72,7 +72,7 @@ public class UserService {
         try {
             userRepository.delete(user);
         } catch (Exception e) {
-            throw new UserServiceException(e.getMessage());
+            throw new UserServiceException(e.getMessage(), e);
         }
     }
 
