@@ -51,6 +51,13 @@ public class RewardController {
         return "rewards_tmpl/edit-reward";
     }
 
+    @PostMapping("/edit")
+    public String addReward(@ModelAttribute(value = "reward") Reward reward) {
+        rewardService.edit(reward);
+
+        return "redirect:/rewards";
+    }
+
     @GetMapping("/edit/{title}")
     public String editReward(Model model, @PathVariable(name = "title") String title) {
         model.addAttribute("reward", rewardService.getRewardByTitle(title));
@@ -65,10 +72,4 @@ public class RewardController {
         return "redirect:/rewards";
     }
 
-    @PostMapping("/edit")
-    public String addReward(@ModelAttribute(value = "reward") Reward reward) {
-        rewardService.edit(reward);
-
-        return "redirect:/rewards";
-    }
 }
