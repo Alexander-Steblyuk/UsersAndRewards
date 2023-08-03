@@ -23,6 +23,10 @@ public class RewardingId {
     @Column(name = "rewarddate")
     private LocalDate rewardingDate;
 
+    public RewardingId() {
+
+    }
+
     public RewardingId(User user, Reward reward, LocalDate rewardingDate) {
         this.user = user;
         this.reward = reward;

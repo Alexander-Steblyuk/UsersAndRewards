@@ -53,4 +53,11 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
     List<Rewarding> findRewardingsByIdUser(User user);
 
     List<Rewarding> findRewardingsByIdReward(Reward reward);
+
+    /*@Query(value = "select * from rewardings where user_id IN (select id from users where (:fullname is null " +
+            "OR lower(concat(firstName, ' ', lastName)) like CONCAT('%', LOWER(:fullname), '%'))) AND " +
+            "(:full is null OR lower(title) like " +
+            "CONCAT('%', LOWER(:title), '%')) AND (:description is null OR description like " +
+            "CONCAT('%', LOWER(:description), '%')))", nativeQuery = true)
+    List<Reward> findFilteredRewardings(@Param("title") String title, @Param("description") String description);*/
 }

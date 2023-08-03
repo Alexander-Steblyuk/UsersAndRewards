@@ -21,19 +21,19 @@
         <div style="margin-inline: auto" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-rewarding"></i></span>
             <label>Название награды: </label>
-            <input th:value="${description != null} ? ${description}" type="text" name="title"
+            <input th:value="${title != null} ? ${title}" type="text" name="title"
                    placeholder="Название награды" class="form-control"/>
         </div>
 
         <div style="margin-inline: auto" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-rewarding"></i></span>
             <label>Дата награждения: </label>
-            <input th:value="${rewardDate != null} ? ${rewardDate}" type="text" name="rewardDate"
+            <input th:value="${rewardingDate != null} ? ${rewardingDate}" type="text" name="rewardingDate"
                    placeholder="Дата награждения" class="form-control"/>
         </div>
 
         <div style="margin-inline: auto" class="form-group">
-            <div class="col-sm-6 controls">
+            <div class="controls">
                 <button type="submit" class="btn btn-primary">Отфильтровать</button>
             </div>
         </div>
@@ -44,17 +44,14 @@
             <th>Пользователь</th>
             <th>Награда</th>
             <th>Дата награждения</th>
-            <th colspan="3" style="text-align: center">Действия</th>
+            <th colspan="2" style="text-align: center">Действия</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="rewarding : ${rewardings}">
             <td th:text="${rewarding.getUser().firstName + ' ' + rewarding.getUser().lastName}"/>
             <td th:text="${rewarding.getReward().title}"/>
-            <td th:text="${rewarding.getRewardDate()}"/>
-            <td>
-                <a th:href="@{'/rewardings/show/' + ${rewarding.id}}" th:text="Посмотреть"/>
-            </td>
+            <td th:text="${rewarding.getRewardingDate()}"/>
             <td>
                 <a th:href="@{'/rewardings/edit/' + ${rewarding.id}}" th:text="Изменить"/>
             </td>
@@ -64,7 +61,7 @@
         </tr>
         </tbody>
     </table>
-    <span th:text="${'Всего наград: ' + rewardings.size()}"/>
+    <span th:text="${'Всего награждений: ' + rewardings.size()}"/>
     <br>
     <br>
     <a th:href="@{'/rewardings/edit'}" th:text="'Добавить награждение'"/>

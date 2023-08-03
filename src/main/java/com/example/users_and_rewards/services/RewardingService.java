@@ -54,4 +54,8 @@ public class RewardingService {
     public List<Rewarding> findRewardingByReward(Reward reward) {
         return rewardingRepository.findRewardingsByIdReward(reward);
     }
+
+    public List<Rewarding> getAll() {
+        return rewardingRepository.findAll();
+    }
 }
