@@ -13,14 +13,14 @@
     <form style="margin-bottom: 25px" th:action="@{/rewardings}" method="get" class="form-inline">
         <div style="margin-inline: auto" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-rewarding"></i></span>
-            <label>ФИО пользователя: </label>
-            <input th:value="${title != null} ? ${title}" type="text" name="fullname"
+            <label>ФИО: </label>
+            <input th:value="${fullName != null} ? ${fullName}" type="text" name="fullName"
                    placeholder="ФИО" class="form-control"/>
         </div>
 
         <div style="margin-inline: auto" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-rewarding"></i></span>
-            <label>Название награды: </label>
+            <label>Награда: </label>
             <input th:value="${title != null} ? ${title}" type="text" name="title"
                    placeholder="Название награды" class="form-control"/>
         </div>
@@ -28,7 +28,7 @@
         <div style="margin-inline: auto" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-rewarding"></i></span>
             <label>Дата награждения: </label>
-            <input th:value="${rewardingDate != null} ? ${rewardingDate}" type="text" name="rewardingDate"
+            <input th:value="${rewardingDate != null} ? ${rewardingDate}" type="date" name="rewardingDate"
                    placeholder="Дата награждения" class="form-control"/>
         </div>
 

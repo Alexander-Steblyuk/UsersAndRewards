@@ -44,7 +44,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersByBirthday(@Param("birthday") LocalDate birthday);
 
     @Query(value = "select * from users where (:fullname is null OR lower(concat(firstName, ' ', lastName)) like " +
-            "CONCAT('%', LOWER(:fullname), '%')) AND (:birthday is null OR birthday >= :birthday)", nativeQuery = true)
+            "CONCAT('%', LOWER(:fullname), '%')) AND (cast(:birthday as timestamp) is null OR birthday >= :birthday)",
+            nativeQuery = true)
     List<User> findFilteredUsers(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);
 
     /*@Query(value = "select * from users where (concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%') " +

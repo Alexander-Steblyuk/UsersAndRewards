@@ -15,6 +15,10 @@ public class Rewarding {
     public Rewarding() {
     }
 
+    public Rewarding(RewardingId rewardingId) {
+        id = rewardingId;
+    }
+
     public Rewarding(User user, Reward reward, LocalDate rewardingDate) {
         id = new RewardingId(user, reward, rewardingDate);
     }

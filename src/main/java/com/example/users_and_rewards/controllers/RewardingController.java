@@ -6,6 +6,7 @@ import com.example.users_and_rewards.entities.rewarding.RewardingId;
 import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardServiceException;
 import com.example.users_and_rewards.services.RewardService;
 import com.example.users_and_rewards.services.RewardingService;
+import com.example.users_and_rewards.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,49 +20,63 @@ import java.time.LocalDate;
 @RequestMapping("/rewardings")
 public class RewardingController {
     private RewardingService rewardingService;
+    private UserService userService;
+    private RewardService rewardService;
 
     @Autowired
     public void setRewardingService(RewardingService rewardingService) {
         this.rewardingService = rewardingService;
     }
 
-    @GetMapping
-    public String showAllRewardingss(Model model, @RequestParam(name = "fullName", required = false) String fullName,
-                                     @RequestParam(name = "title", required = false) String title,
-                                     @RequestParam(name = "rewardingDate", required = false)LocalDate rewardingDate) {
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
-        /*model.addAttribute("fullName", fullName);
+    @Autowired
+    public void setRewardService(RewardService rewardService) {
+        this.rewardService = rewardService;
+    }
+
+    @GetMapping
+    public String showAllRewardings(Model model, @RequestParam(name = "fullName", required = false) String fullName,
+                                     @RequestParam(name = "title", required = false) String title,
+                                     @RequestParam(name = "rewardingDate", required = false) LocalDate rewardingDate) {
+
+        model.addAttribute("fullName", fullName);
         model.addAttribute("title", title);
-        model.addAttribute("rewardingDate", rewardingService.f);*/
-        model.addAttribute("rewardings", rewardingService.getAll());
+        model.addAttribute("rewardingDate", rewardingDate);
+        model.addAttribute("rewardings", rewardingService.getRewardings(fullName, title, rewardingDate));
 
         return "rewardings_tmpl/rewardings";
     }
 
     @GetMapping("/edit")
     public String addRewarding(Model model) {
-        model.addAttribute("rewarding", new Rewarding());
+        model.addAttribute("rewardingId", new RewardingId());
+        model.addAttribute("users", userService.getUsers(null, null));
+        model.addAttribute("rewards", rewardService.getRewards(null, null));
 
         return "rewardings_tmpl/edit-rewarding";
     }
 
     @PostMapping("/edit")
-    public String addReward(@ModelAttribute(value = "rewarding") Rewarding rewarding) {
-        rewardingService.edit(rewarding);
+    public String addReward(@ModelAttribute(value = "rewardingId") RewardingId rewardingId) {
+        rewardingService.edit(new Rewarding(rewardingId));
 
         return "redirect:/rewardings";
     }
 
     @GetMapping("/edit/{id}")
     public String editReward(Model model, @PathVariable(name = "id") RewardingId id) {
-        model.addAttribute("reward", rewardingService.);
+        model.addAttribute("rewarding", rewardingService.findById(id));
 
-        return "rewardings_tmpl/edit-reward";
+        return "rewardings_tmpl/edit-rewarding";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") RewardingId id) {
-        rewardingService.delete(rewardingService.);
+        rewardingService.delete(rewardingService.findById(id));
 
         return "redirect:/rewards";
     }

@@ -54,10 +54,11 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
 
     List<Rewarding> findRewardingsByIdReward(Reward reward);
 
-    /*@Query(value = "select * from rewardings where user_id IN (select id from users where (:fullname is null " +
-            "OR lower(concat(firstName, ' ', lastName)) like CONCAT('%', LOWER(:fullname), '%'))) AND " +
-            "(:full is null OR lower(title) like " +
-            "CONCAT('%', LOWER(:title), '%')) AND (:description is null OR description like " +
-            "CONCAT('%', LOWER(:description), '%')))", nativeQuery = true)
-    List<Reward> findFilteredRewardings(@Param("title") String title, @Param("description") String description);*/
+    @Query(value = "select * from rewardings where " +
+            "UserId IN (select id from users where (:fullname is null OR lower(concat(firstName, ' ', lastName)) like " +
+            "CONCAT('%', LOWER(:fullname), '%'))) AND RewardTitle IN (select title from rewards where (:title is null OR " +
+            "lower(title) like CONCAT('%', LOWER(:title), '%'))) AND (cast(:rewardingDate as timestamp) is null OR " +
+            "rewardDate >= :rewardingDate)", nativeQuery = true)
+    List<Rewarding> findFilteredRewardings(@Param("fullname") String fullname, @Param("title") String title,
+                                        @Param("rewardingDate") LocalDate rewardingDate);
 }

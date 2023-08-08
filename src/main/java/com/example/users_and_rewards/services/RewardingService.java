@@ -3,6 +3,7 @@ package com.example.users_and_rewards.services;
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.User;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
+import com.example.users_and_rewards.entities.rewarding.RewardingId;
 import com.example.users_and_rewards.exceptions.rewarding_service_exceptions.RewardingServiceException;
 import com.example.users_and_rewards.repositories.RewardingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,10 @@ public class RewardingService {
         this.rewardingRepository = rewardingRepository;
     }
 
-    public void save(User user, Reward reward, LocalDate date)  throws RewardingServiceException {
+    public void edit(Rewarding rewarding)  throws RewardingServiceException {
         try {
-            rewardingRepository.save(user.getId(), reward.getTitle(), date);
+            rewardingRepository.save(rewarding.getUser().getId(),
+                    rewarding.getReward().getTitle(), rewarding.getRewardingDate());
         } catch (Exception e) {
             throw new RewardingServiceException(e.getMessage());
         }
@@ -39,9 +41,10 @@ public class RewardingService {
         }
     }
 
-    public void delete(User user, Reward reward, LocalDate date) throws RewardingServiceException {
+    public void delete(Rewarding rewarding) throws RewardingServiceException {
         try {
-            rewardingRepository.delete(user.getId(), reward.getTitle(), date);
+            rewardingRepository.delete(rewarding.getUser().getId(),
+                    rewarding.getReward().getTitle(), rewarding.getRewardingDate());
         } catch (Exception e) {
             throw new RewardingServiceException(e.getMessage());
         }
@@ -55,7 +58,15 @@ public class RewardingService {
         return rewardingRepository.findRewardingsByIdReward(reward);
     }
 
-    public List<Rewarding> getAll() {
-        return rewardingRepository.findAll();
+    public List<Rewarding> getRewardings(String fullName, String title, LocalDate rewardingDate) {
+        if (fullName == null && title == null && rewardingDate == null) {
+            return rewardingRepository.findAll();
+        }
+
+        return rewardingRepository.findFilteredRewardings(fullName, title, rewardingDate);
+    }
+
+    public Rewarding findById(RewardingId id) {
+        return rewardingRepository.findById(id).orElseThrow();
     }
 }
