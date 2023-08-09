@@ -75,19 +75,28 @@ public class RewardingController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editReward(Model model, @PathVariable(name = "id") RewardingId id) {
-        Rewarding rewarding = rewardingService.findById(id);
+    public String editReward(Model model, @PathVariable(name = "id") String id) {
+        String[] params = id.split("_");
 
-        model.addAttribute("rewarding", new RewardingDTO(rewarding.getUser().getId(),
-                rewarding.getReward().getTitle(), rewarding.getRewardingDate()));
-        rewardingService.delete(rewarding);
+
+        model.addAttribute("users", userService.getUsers(null, null));
+        model.addAttribute("rewards", rewardService.getRewards(null, null));
+
+        model.addAttribute("rewarding", new RewardingDTO(Long.parseLong(params[0]),
+                params[1], LocalDate.parse(params[2])));
+
+        rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
+                rewardService.getRewardByTitle(params[1]), LocalDate.parse(params[2]));
 
         return "rewardings_tmpl/edit-rewarding";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") RewardingId id) {
-        rewardingService.delete(rewardingService.findById(id));
+    public String deleteRewarding(@PathVariable("id") String id) {
+        String[] params = id.split("_");
+
+        rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
+                rewardService.getRewardByTitle(params[1]), LocalDate.parse(params[2]));
 
         return "redirect:/rewards";
     }

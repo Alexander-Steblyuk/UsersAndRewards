@@ -30,6 +30,14 @@ public class RewardingService {
         }
     }
 
+    public void edit(User user, Reward reward, LocalDate rewardingDate)  throws RewardingServiceException {
+        try {
+            rewardingRepository.save(user.getId(), reward.getTitle(), rewardingDate);
+        } catch (Exception e) {
+            throw new RewardingServiceException(e.getMessage());
+        }
+    }
+
     public void update(User user, Reward reward, LocalDate date) throws RewardingServiceException {
         Rewarding oldRewarding = rewardingRepository.findRewardingByIdUserAndIdRewardAndIdRewardingDate(user, reward, date);
 
@@ -45,6 +53,14 @@ public class RewardingService {
         try {
             rewardingRepository.delete(rewarding.getUser().getId(),
                     rewarding.getReward().getTitle(), rewarding.getRewardingDate());
+        } catch (Exception e) {
+            throw new RewardingServiceException(e.getMessage());
+        }
+    }
+
+    public void delete(User user, Reward reward, LocalDate rewardingDate) throws RewardingServiceException {
+        try {
+            rewardingRepository.delete(user.getId(), reward.getTitle(), rewardingDate);
         } catch (Exception e) {
             throw new RewardingServiceException(e.getMessage());
         }
@@ -68,5 +84,9 @@ public class RewardingService {
 
     public Rewarding findById(RewardingId id) {
         return rewardingRepository.findById(id).orElseThrow();
+    }
+
+    public Rewarding findById(User user, Reward reward, LocalDate rewardingDate) {
+        return rewardingRepository.findRewardingByIdUserAndIdRewardAndIdRewardingDate(user, reward, rewardingDate);
     }
 }

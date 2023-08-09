@@ -53,10 +53,12 @@
             <td th:text="${rewarding.getReward().title}"/>
             <td th:text="${rewarding.getRewardingDate()}"/>
             <td>
-                <a th:href="@{'/rewardings/edit/' + ${rewarding.id}}" th:text="Изменить"/>
+                <a th:href="@{'/rewardings/edit/' + ${rewarding.getUser().id} + '_' + ${rewarding.getReward().title} +
+                '_' + ${rewarding.getRewardingDate()}}" th:text="Изменить"/>
             </td>
             <td>
-                <a th:href="@{'/rewardings/delete/' + ${rewarding.id}}" th:text="Удалить"/>
+                <a th:href="@{'/rewardings/delete/' + ${rewarding.getUser().id} + '_' + ${rewarding.getReward().title} +
+                 '_' + ${rewarding.getRewardingDate()}}" th:text="Удалить"/>
             </td>
         </tr>
         </tbody>
