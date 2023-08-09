@@ -13,6 +13,7 @@ public class Rewarding {
     private RewardingId id;
 
     public Rewarding() {
+        id = new RewardingId();
     }
 
     public Rewarding(RewardingId rewardingId) {

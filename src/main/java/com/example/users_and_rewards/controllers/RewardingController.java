@@ -1,5 +1,6 @@
 package com.example.users_and_rewards.controllers;
 
+import com.example.users_and_rewards.dto.RewardingDTO;
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
 import com.example.users_and_rewards.entities.rewarding.RewardingId;
@@ -53,7 +54,7 @@ public class RewardingController {
 
     @GetMapping("/edit")
     public String addRewarding(Model model) {
-        model.addAttribute("rewardingId", new RewardingId());
+        model.addAttribute("rewarding", new RewardingDTO());
         model.addAttribute("users", userService.getUsers(null, null));
         model.addAttribute("rewards", rewardService.getRewards(null, null));
 
@@ -61,15 +62,25 @@ public class RewardingController {
     }
 
     @PostMapping("/edit")
-    public String addReward(@ModelAttribute(value = "rewardingId") RewardingId rewardingId) {
-        rewardingService.edit(new Rewarding(rewardingId));
+    public String addReward(@ModelAttribute(value = "rewarding") RewardingDTO rewardingDTO) {
+        Rewarding rewarding = new Rewarding();
+
+        rewarding.setUser(userService.getUserById(rewardingDTO.getUserId()));
+        rewarding.setReward(rewardService.getRewardByTitle(rewardingDTO.getRewardTitle()));
+        rewarding.setRewardingDate(rewardingDTO.getRewardingDate());
+
+        rewardingService.edit(rewarding);
 
         return "redirect:/rewardings";
     }
 
     @GetMapping("/edit/{id}")
     public String editReward(Model model, @PathVariable(name = "id") RewardingId id) {
-        model.addAttribute("rewarding", rewardingService.findById(id));
+        Rewarding rewarding = rewardingService.findById(id);
+
+        model.addAttribute("rewarding", new RewardingDTO(rewarding.getUser().getId(),
+                rewarding.getReward().getTitle(), rewarding.getRewardingDate()));
+        rewardingService.delete(rewarding);
 
         return "rewardings_tmpl/edit-rewarding";
     }
