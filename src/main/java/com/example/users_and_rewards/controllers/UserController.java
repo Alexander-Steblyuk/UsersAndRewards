@@ -41,7 +41,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("rewardings", userService.findRewardings(user));
         } catch (UserNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
         return "users_tmpl/user-page";
@@ -56,14 +56,22 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String editUser(Model model, @PathVariable(name = "id") Long id) {
-        model.addAttribute("user", userService.getUserById(id));
+        try {
+            model.addAttribute("user", userService.getUserById(id));
+        } catch (UserServiceException e) {
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "users_tmpl/edit-user";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        userService.delete(userService.getUserById(id));
+        try {
+            userService.delete(userService.getUserById(id));
+        } catch (UserServiceException e) {
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "redirect:/users";
     }

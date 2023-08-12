@@ -12,6 +12,7 @@
 <body>
 <div class="container">
     <h2 th:text="${reward.title != null ? 'Редактирование награды - ' + reward.title : 'Добавление новой награды'}"></h2>
+    <a th:href="@{'/index'}" th:text="'<- На главную страницу'"/>
     <form th:action="@{/rewards/edit}" th:object="${reward}"
           method="post" class="form-horizontal">
         <div style="margin-bottom: 25px" class="input-group">

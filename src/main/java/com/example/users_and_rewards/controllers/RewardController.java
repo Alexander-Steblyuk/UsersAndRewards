@@ -38,7 +38,7 @@ public class RewardController {
             model.addAttribute("reward", reward);
             model.addAttribute("rewardings", rewardService.findRewardingsByReward(reward));
         } catch (RewardServiceException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return "rewards_tmpl/reward-page";
@@ -53,21 +53,32 @@ public class RewardController {
 
     @PostMapping("/edit")
     public String addReward(@ModelAttribute(value = "reward") Reward reward) {
-        rewardService.edit(reward);
-
+        try {
+            rewardService.edit(reward);
+        } catch (RewardServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
         return "redirect:/rewards";
     }
 
     @GetMapping("/edit/{title}")
     public String editReward(Model model, @PathVariable(name = "title") String title) {
-        model.addAttribute("reward", rewardService.getRewardByTitle(title));
+        try {
+            model.addAttribute("reward", rewardService.getRewardByTitle(title));
+        } catch (RewardServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "rewards_tmpl/edit-reward";
     }
 
     @GetMapping("/delete/{title}")
     public String deleteUser(@PathVariable("title") String title) {
-        rewardService.delete(rewardService.getRewardByTitle(title));
+        try {
+            rewardService.delete(rewardService.getRewardByTitle(title));
+        } catch (RewardServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "redirect:/rewards";
     }

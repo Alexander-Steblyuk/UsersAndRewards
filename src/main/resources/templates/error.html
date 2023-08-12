@@ -8,16 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h2>Главная страница</h2>
-<br>
-<br>
-<h3>Выберите нужный вам пункт:</h3>
-<div class="h4">
-    <ul>
-        <li><a th:href="@{'/users'}" th:text="'К списку пользователей'"/></li>
-        <li><a th:href="@{'/rewards'}" th:text="'К списку наград'"/></li>
-        <li><a th:href="@{'/rewardings'}" th:text="'К награждениям'"/></li>
-    </ul>
+<h2 th:text="${'Страница исключения' + error}"></h2>
 </div>
 </body>
 </html>

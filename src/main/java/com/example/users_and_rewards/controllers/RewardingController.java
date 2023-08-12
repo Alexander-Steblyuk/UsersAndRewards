@@ -5,6 +5,8 @@ import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
 import com.example.users_and_rewards.entities.rewarding.RewardingId;
 import com.example.users_and_rewards.exceptions.reward_service_exceptions.RewardServiceException;
+import com.example.users_and_rewards.exceptions.rewarding_service_exceptions.RewardingServiceException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.UserServiceException;
 import com.example.users_and_rewards.services.RewardService;
 import com.example.users_and_rewards.services.RewardingService;
 import com.example.users_and_rewards.services.UserService;
@@ -65,11 +67,15 @@ public class RewardingController {
     public String addReward(@ModelAttribute(value = "rewarding") RewardingDTO rewardingDTO) {
         Rewarding rewarding = new Rewarding();
 
-        rewarding.setUser(userService.getUserById(rewardingDTO.getUserId()));
-        rewarding.setReward(rewardService.getRewardByTitle(rewardingDTO.getRewardTitle()));
-        rewarding.setRewardingDate(rewardingDTO.getRewardingDate());
+        try {
+            rewarding.setUser(userService.getUserById(rewardingDTO.getUserId()));
+            rewarding.setReward(rewardService.getRewardByTitle(rewardingDTO.getRewardTitle()));
+            rewarding.setRewardingDate(rewardingDTO.getRewardingDate());
 
-        rewardingService.edit(rewarding);
+            rewardingService.edit(rewarding);
+        } catch (RewardServiceException e) {
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "redirect:/rewardings";
     }
@@ -85,8 +91,12 @@ public class RewardingController {
         model.addAttribute("rewarding", new RewardingDTO(Long.parseLong(params[0]),
                 params[1], LocalDate.parse(params[2])));
 
-        rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
+        try {
+            rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
                 rewardService.getRewardByTitle(params[1]), LocalDate.parse(params[2]));
+        } catch (RewardingServiceException e) {
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         return "rewardings_tmpl/edit-rewarding";
     }
@@ -95,10 +105,14 @@ public class RewardingController {
     public String deleteRewarding(@PathVariable("id") String id) {
         String[] params = id.split("_");
 
-        rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
+        try {
+            rewardingService.delete(userService.getUserById(Long.parseLong(params[0])),
                 rewardService.getRewardByTitle(params[1]), LocalDate.parse(params[2]));
+        } catch (RewardingServiceException e) {
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
-        return "redirect:/rewards";
+        return "redirect:/rewardings";
     }
 
 }

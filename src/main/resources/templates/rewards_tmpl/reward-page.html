@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="container">
+    <a th:href="@{'/index'}" th:text="'<- На главную страницу'"/>
     <a style="display:block; text-align:right;" th:href="@{'/rewards'}" th:text="'К списку наград'"/>
     <h3 th:text = "${'О награде: ' + reward.title}"></h3>
     <br>

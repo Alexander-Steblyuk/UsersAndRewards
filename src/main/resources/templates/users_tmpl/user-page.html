@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="container">
+    <a th:href="@{'/index'}" th:text="'<- На главную страницу'"/>
     <a style="display:block; text-align:right;" th:href="@{'/users'}" th:text="'К списку пользователей'"/>
     <h3 th:text = "${'О пользователе: ' + user.firstName + ' ' + user.lastName}"></h3>
     <br>

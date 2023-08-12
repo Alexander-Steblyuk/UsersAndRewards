@@ -1,10 +1,14 @@
 package com.example.users_and_rewards.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class RewardingDTO {
     private Long userId;
     private String rewardTitle;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate rewardingDate;
 
     public RewardingDTO() {
