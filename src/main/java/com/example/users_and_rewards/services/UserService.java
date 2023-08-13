@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class UserService {
@@ -29,13 +28,6 @@ public class UserService {
     }
 
     public void edit(User user) throws UserServiceException {
-        if (user.getId() != null) {
-            update(user);
-        } else {
-            save(user);
-        }
-    }
-    private void save(User user) throws UserServiceException {
         if (user.getFirstName() == null || user.getFirstName().equals(EMPTY_STRING)) {
             throw new IllegalFirstNameException();
         }
@@ -53,6 +45,14 @@ public class UserService {
             throw new UserAlreadyExistsException();
         }
 
+        if (user.getId() != null) {
+            update(user);
+        } else {
+            save(user);
+        }
+    }
+
+    private void save(User user) throws UserServiceException {
         try {
             userRepository.save(user);
         } catch (Exception e) {

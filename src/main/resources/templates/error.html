@@ -2,13 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Главная страница</title>
+    <title>Ошибка</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h2 th:text="${'Страница исключения' + error}"></h2>
+<br>
+<br>
+<div class="container" style="text-align: center">
+    <h3 th:text="${'Упс, возникла внештатная ситуация (' + status + '_' + message + ').'}"></h3>
+    <h3>Все наши инженеры бросили свою работу ради её решения. <br> Просим отнестись с пониманием.</h3>
+    <br>
+    <a class="btn btn-primary" th:href="@{'/index'}" th:text="'На главную страницу'"/>
 </div>
 </body>
 </html>
