@@ -18,13 +18,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 @RequestMapping("/rewards")
 public class RewardController {
-    private static final String TITLE_ATTR_NAME = "title";
-    private static final String DESCRIPTION_ATTR_NAME = "description";
-    private static final String REWARD_ATTR_NAME = "reward";
-    private static final String REWARDINGS_ATTR_NAME = "rewardings";
-    private static final String REWARDS_ATTR_NAME = "rewards";
+    private static final String TITLE_ATTRIBUTE = "title";
+    private static final String DESCRIPTION_ATTRIBUTE = "description";
+    private static final String REWARD_ATTRIBUTE = "reward";
+    private static final String REWARDINGS_ATTRIBUTE = "rewardings";
+    private static final String REWARDS_ATTRIBUTE = "rewards";
 
-    private static final String PATH_VAR_TITLE_NAME = TITLE_ATTR_NAME;
+    private static final String TITLE_PATH_VARIABLE = TITLE_ATTRIBUTE;
 
     private static final String REWARDS_PAGE_PATH = "rewards_tmpl/rewards";
     private static final String REWARD_PAGE_PATH = "rewards_tmpl/reward-page";
@@ -39,22 +39,22 @@ public class RewardController {
     }
 
     @GetMapping
-    public String showAllRewards(Model model, @RequestParam(name = TITLE_ATTR_NAME, required = false) String title,
-                                 @RequestParam(name = DESCRIPTION_ATTR_NAME, required = false) String description) {
+    public String showAllRewards(Model model, @RequestParam(name = TITLE_ATTRIBUTE, required = false) String title,
+                                 @RequestParam(name = DESCRIPTION_ATTRIBUTE, required = false) String description) {
 
-        model.addAttribute(TITLE_ATTR_NAME, title);
-        model.addAttribute(DESCRIPTION_ATTR_NAME, description);
-        model.addAttribute(REWARDS_ATTR_NAME, rewardService.getRewards(title, description));
+        model.addAttribute(TITLE_ATTRIBUTE, title);
+        model.addAttribute(DESCRIPTION_ATTRIBUTE, description);
+        model.addAttribute(REWARDS_ATTRIBUTE, rewardService.getRewards(title, description));
 
         return REWARDS_PAGE_PATH;
     }
 
     @GetMapping("/show/{title}")
-    public String showReward(Model model, @PathVariable(PATH_VAR_TITLE_NAME) String title) {
+    public String showReward(Model model, @PathVariable(TITLE_PATH_VARIABLE) String title) {
         try {
             Reward reward = rewardService.getRewardByTitle(title);
-            model.addAttribute(REWARD_ATTR_NAME, reward);
-            model.addAttribute(REWARDINGS_ATTR_NAME, rewardService.findRewardingsByReward(reward));
+            model.addAttribute(REWARD_ATTRIBUTE, reward);
+            model.addAttribute(REWARDINGS_ATTRIBUTE, rewardService.findRewardingsByReward(reward));
         } catch (RewardServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -64,13 +64,13 @@ public class RewardController {
 
     @GetMapping("/edit")
     public String addReward(Model model) {
-        model.addAttribute(REWARD_ATTR_NAME, new Reward());
+        model.addAttribute(REWARD_ATTRIBUTE, new Reward());
 
         return EDIT_PAGE_PATH;
     }
 
     @PostMapping("/edit")
-    public String addReward(@ModelAttribute(value = REWARD_ATTR_NAME) Reward reward) {
+    public String addReward(@ModelAttribute(value = REWARD_ATTRIBUTE) Reward reward) {
         try {
             rewardService.edit(reward);
         } catch (RewardServiceException e) {
@@ -80,9 +80,9 @@ public class RewardController {
     }
 
     @GetMapping("/edit/{title}")
-    public String editReward(Model model, @PathVariable(name = PATH_VAR_TITLE_NAME) String title) {
+    public String editReward(Model model, @PathVariable(name = TITLE_PATH_VARIABLE) String title) {
         try {
-            model.addAttribute(REWARD_ATTR_NAME, rewardService.getRewardByTitle(title));
+            model.addAttribute(REWARD_ATTRIBUTE, rewardService.getRewardByTitle(title));
         } catch (RewardServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
@@ -91,7 +91,7 @@ public class RewardController {
     }
 
     @GetMapping("/delete/{title}")
-    public String deleteUser(@PathVariable(PATH_VAR_TITLE_NAME) String title) {
+    public String deleteUser(@PathVariable(TITLE_PATH_VARIABLE) String title) {
         try {
             rewardService.delete(rewardService.getRewardByTitle(title));
         } catch (RewardServiceException e) {
