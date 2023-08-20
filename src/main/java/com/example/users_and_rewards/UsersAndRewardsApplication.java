@@ -4,8 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UsersAndRewardsApplication{
-
+public class UsersAndRewardsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UsersAndRewardsApplication.class, args);
 	}
