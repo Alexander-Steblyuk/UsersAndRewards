@@ -2,7 +2,12 @@ package com.example.users_and_rewards.services;
 
 import com.example.users_and_rewards.entities.User;
 import com.example.users_and_rewards.entities.rewarding.Rewarding;
-import com.example.users_and_rewards.exceptions.user_service_exceptions.*;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.UserNotFoundException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.IllegalBirthDayException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.IllegalFirstNameException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.IllegalLastNameException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.UserAlreadyExistsException;
+import com.example.users_and_rewards.exceptions.user_service_exceptions.UserServiceException;
 import com.example.users_and_rewards.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,7 @@ import java.util.List;
 @Service
 public class UserService {
     private static final String EMPTY_STRING = "";
+    private static final int MAX_AGE = 120;
 
     private UserRepository userRepository;
     private RewardingService rewardingService;
@@ -97,7 +103,7 @@ public class UserService {
     }
 
     private boolean yearsCheck(LocalDate birthday) {
-        return LocalDate.now().getYear() - birthday.getYear() < 120 &&
+        return LocalDate.now().getYear() - birthday.getYear() < MAX_AGE &&
                 birthday.getYear() <= LocalDate.now().getYear();
     }
 }

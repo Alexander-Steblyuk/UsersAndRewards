@@ -28,17 +28,20 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
             ":new_reward_date)", nativeQuery = true)
     void update(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
                      @Param("reward_date") LocalDate date, @Param("new_user_id") Long newUserId,
-                    @Param("new_reward_title") String newRewardTitle, @Param("new_reward_date") LocalDate newRewardDate);
+                    @Param("new_reward_title") String newRewardTitle,
+                @Param("new_reward_date") LocalDate newRewardDate);
 
     /*@Modifying
     @Transactional
-    @Query(value = "call rewarding_reward_update(:user_id, :reward_title, :reward_date, :new_reward_title)", nativeQuery = true)
+    @Query(value = "call rewarding_reward_update(:user_id, :reward_title, :reward_date, :new_reward_title)",
+    nativeQuery = true)
     void updateReward(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
                      @Param("reward_date") LocalDate date, @Param("new_reward_title") String newRewardTitle);
 
     @Modifying
     @Transactional
-    @Query(value = "call rewarding_date_update(:user_id, :reward_title, :reward_date, :new_reward_date)", nativeQuery = true)
+    @Query(value = "call rewarding_date_update(:user_id, :reward_title, :reward_date, :new_reward_date)",
+    nativeQuery = true)
     void updateDate(@Param("user_id") Long userId, @Param("reward_title") String rewardTitle,
                      @Param("reward_date") LocalDate date, @Param("new_reward_date") LocalDate newRewardDate);*/
 
@@ -55,10 +58,10 @@ public interface RewardingRepository extends JpaRepository<Rewarding, RewardingI
     List<Rewarding> findRewardingsByIdReward(Reward reward);
 
     @Query(value = "select * from rewardings where " +
-            "UserId IN (select id from users where (:fullname is null OR lower(concat(firstName, ' ', lastName)) like " +
-            "CONCAT('%', LOWER(:fullname), '%'))) AND RewardTitle IN (select title from rewards where (:title is null OR " +
-            "lower(title) like CONCAT('%', LOWER(:title), '%'))) AND (cast(:rewardingDate as timestamp) is null OR " +
-            "rewardDate >= :rewardingDate)", nativeQuery = true)
+            "UserId IN (select id from users where (:fullname is null OR lower(concat(firstName, ' ', lastName)) " +
+            "like CONCAT('%', LOWER(:fullname), '%'))) AND RewardTitle IN (select title from rewards where " +
+            "(:title is null OR lower(title) like CONCAT('%', LOWER(:title), '%'))) AND " +
+            "(cast(:rewardingDate as timestamp) is null OR rewardDate >= :rewardingDate)", nativeQuery = true)
     List<Rewarding> findFilteredRewardings(@Param("fullname") String fullname, @Param("title") String title,
                                         @Param("rewardingDate") LocalDate rewardingDate);
 }

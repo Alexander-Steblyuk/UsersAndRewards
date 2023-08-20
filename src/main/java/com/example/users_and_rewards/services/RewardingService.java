@@ -9,6 +9,7 @@ import com.example.users_and_rewards.repositories.RewardingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class RewardingService {
     }
 
     public void update(User user, Reward reward, LocalDate date) throws RewardingServiceException {
-        Rewarding oldRewarding = rewardingRepository.findRewardingByIdUserAndIdRewardAndIdRewardingDate(user, reward, date);
+        Rewarding oldRewarding = rewardingRepository.findRewardingByIdUserAndIdRewardAndIdRewardingDate(user,
+                reward, date);
 
         try {
             rewardingRepository.update(oldRewarding.getUser().getId(), oldRewarding.getReward().getTitle(),

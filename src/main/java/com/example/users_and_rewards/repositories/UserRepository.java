@@ -50,7 +50,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /*@Query(value = "select * from users where (concat(firstName, ' ', lastName)) like CONCAT('%', :fullname, '%') " +
             "and birthday >= :birthday", nativeQuery = true)
-    List<User> findUsersByFullNameAndBirthday(@Param("fullname") String fullName, @Param("birthday") LocalDate birthday);*/
+    List<User> findUsersByFullNameAndBirthday(@Param("fullname") String fullName, @Param("birthday")
+    LocalDate birthday);*/
 
     User findUserByFirstNameAndLastNameAndBirthday(String firstname, String lastname, LocalDate birthday);
 
