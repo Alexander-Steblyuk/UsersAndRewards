@@ -1,6 +1,9 @@
 package com.example.users_and_rewards.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "rewards")
