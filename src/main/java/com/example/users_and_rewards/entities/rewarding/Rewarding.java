@@ -2,7 +2,9 @@ package com.example.users_and_rewards.entities.rewarding;
 
 import com.example.users_and_rewards.entities.Reward;
 import com.example.users_and_rewards.entities.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.EmbeddedId;
 
 import java.time.LocalDate;
 

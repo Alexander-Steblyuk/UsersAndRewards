@@ -35,10 +35,17 @@ public class RewardingId {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         RewardingId that = (RewardingId) o;
-        return Objects.equals(user, that.user) && Objects.equals(reward, that.reward) && Objects.equals(rewardingDate, that.rewardingDate);
+        return Objects.equals(user, that.user) && Objects.equals(reward, that.reward) &&
+                Objects.equals(rewardingDate, that.rewardingDate);
     }
 
     @Override
