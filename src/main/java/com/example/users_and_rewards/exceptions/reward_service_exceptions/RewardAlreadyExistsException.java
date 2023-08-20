@@ -7,18 +7,6 @@ public class RewardAlreadyExistsException extends RewardServiceException {
         super();
     }
 
-    public RewardAlreadyExistsException(String s) {
-        super(s);
-    }
-
-    public RewardAlreadyExistsException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RewardAlreadyExistsException(Throwable cause) {
-        super(cause);
-    }
-
     @Override
     public String getMessage() {
         return EXISTING_REWARD_INSERT_MESSAGE;

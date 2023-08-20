@@ -7,18 +7,6 @@ public class InvalidRewardTitleException extends RewardServiceException {
         super();
     }
 
-    public InvalidRewardTitleException(String s) {
-        super(s);
-    }
-
-    public InvalidRewardTitleException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InvalidRewardTitleException(Throwable cause) {
-        super(cause);
-    }
-
     @Override
     public String getMessage() {
         return INVALID_TITLE_INSERT_MESSAGE;

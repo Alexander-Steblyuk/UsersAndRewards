@@ -5,15 +5,7 @@ public class RewardServiceException extends IllegalArgumentException {
         super();
     }
 
-    public RewardServiceException(String s) {
-        super(s);
-    }
-
     public RewardServiceException(String message, Throwable cause) {
         super(message, cause);
-    }
-
-    public RewardServiceException(Throwable cause) {
-        super(cause);
     }
 }
