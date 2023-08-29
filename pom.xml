@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -60,15 +61,16 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>5.2.4</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/postgres?currentSchema=boot</url>
+					<url>jdbc:postgresql://localhost:5430/postgres</url>
 					<user>postgres</user>
 					<password>asu321</password>
-					<schemas>
+					<!--<schemas>
 						<schema>boot</schema>
-					</schemas>
+					</schemas>-->
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>UsersAndRewards</finalName>
 	</build>
 
 </project>
