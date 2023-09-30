@@ -30,8 +30,8 @@ public class UserController {
     private static final String ID_PATH_VARIABLE = "id";
 
     private static final String USERS_PAGE_PATH = "users_tmpl/users";
-    private static final String EDIT_USER_PAGE_PATH = "users_tmpl/user-page";
-    private static final String USER_PAGE_PATH = "users_tmpl/edit-user";
+    private static final String EDIT_USER_PAGE_PATH = "users_tmpl/edit-user";
+    private static final String USER_PAGE_PATH = "users_tmpl/user-page";
     private static final String REDIRECT_USERS_PAGE_PATH = "redirect:/users";
 
     private UserService userService;

@@ -41,6 +41,6 @@ public interface RewardRepository extends JpaRepository<Reward, String> {
 
     @Query(value = "select * from rewards where (:title is null OR lower(title) like " +
             "CONCAT('%', LOWER(:title), '%')) AND (:description is null OR description like " +
-            "CONCAT('%', LOWER(:description), '%')))", nativeQuery = true)
+            "CONCAT('%', LOWER(:description), '%'))", nativeQuery = true)
     List<Reward> findFilteredRewards(@Param("title") String title, @Param("description") String description);
 }

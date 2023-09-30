@@ -35,7 +35,7 @@ public class RewardingController {
     private static final String ID_PATH_VARIABLE = "id";
 
     private static final String REWARDINGS_PAGE_PATH = "rewardings_tmpl/rewardings";
-    private static final String EDIT_REWARDING_PAGE_PATH = "rewardings_tmpl/edit_rewarding";
+    private static final String EDIT_REWARDING_PAGE_PATH = "rewardings_tmpl/edit-rewarding";
     private static final String REDIRECT_TO_REWARDINGS_PAGE_PATH = "redirect:/rewardings";
 
     private static final int INDEX_OF_FIRST_ID_PARAM = 0;
